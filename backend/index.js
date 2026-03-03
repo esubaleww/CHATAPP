@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
@@ -11,7 +12,7 @@ const app = express();
 //const __dirname = path.resolve();
 
 app.use(express.json());
-
+app.use(cookieParser());
 app.use(cors());
 
 app.get("/", (req, res) => {
