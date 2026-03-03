@@ -47,7 +47,7 @@ export function templateEmail(userName) {
       }
       .button {
         display: inline-block;
-        background-color: #4f46e5;
+        background-color: #000;
         color: #ffffff;
         padding: 14px 25px;
         border-radius: 6px;
@@ -82,7 +82,7 @@ export function templateEmail(userName) {
       </div>
       <img
         class="hero"
-        src="https://media.istockphoto.com/id/1495736381/photo/speech-bubble.jpg?s=612x612&w=is&k=20&c=pfRldNQJeFIRoP-ABBwgG4hrXdc7iVTuwUJ7LdaZZTk="
+        src="https://media.istockphoto.com/id/1652215712/photo/woman-showing-mobile-phone-to-camera-close-up-online-messaging-digital-overlay.webp?a=1&b=1&s=612x612&w=0&k=20&c=0Sks9Z48IKUq_6pmwIXwYsDSh8QTtba4faPXJqny4pw="
         alt="ChatApp Hero Image"
       />
       <div class="body">
