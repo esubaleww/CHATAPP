@@ -1,4 +1,5 @@
 import express from "express";
+import { register } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -7,12 +8,10 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.send("Now You Can Chat");
+  res.send("Now You Can Log in");
 });
 
-router.get("/register", (req, res) => {
-  res.send("Now You Can Chat");
-});
+router.post("/register", register);
 
 router.get("/logout", (req, res) => {
   res.send("Now You Can Chat");
