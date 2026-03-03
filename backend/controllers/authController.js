@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.js";
+import { templateEmail } from "../emails/templateEmail.js";
+import { sendEmail } from "../emails/sendEmail.js";
 
 export const register = async (req, res) => {
   const { fullname, email, password } = req.body;
@@ -34,13 +36,20 @@ export const register = async (req, res) => {
     });
     if (newUser) {
       generateToken(newUser._id, res);
-      await newUser.save();
+      const savedUser = await newUser.save();
       res.status(201).json({
-        _id: newUser._id,
-        fullname: newUser.fullname,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
+        _id: savedUser._id,
+        fullname: savedUser.fullname,
+        email: savedUser.email,
+        profilePic: savedUser.profilePic,
       });
+
+      try {
+        const htmlContent = templateEmail(fullname);
+        await sendEmail(email, "Welcome to ChatApp!", htmlContent);
+      } catch (emailError) {
+        console.error("Error sending welcome email:", emailError);
+      }
     } else {
       res.status(400).json({ message: "Invalid user!" });
     }
@@ -48,4 +57,36 @@ export const register = async (req, res) => {
     console.log("Error in register controller:", error);
     res.status(500).json({ message: "Internal server error!" });
   }
+};
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password!" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password!" });
+    }
+    generateToken(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in login controller:", error);
+    res.status(500).json({ message: "Internal server error!" });
+  }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully!" });
 };
