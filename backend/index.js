@@ -2,18 +2,21 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import { ENV } from "./lib/env.js";
 
-dotenv.config();
 const app = express();
 //const __dirname = path.resolve();
 
 app.use(express.json());
 
 app.use(cors());
+
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
@@ -26,10 +29,10 @@ app.use("/api/messages", messageRoutes);
 //   });
 // }
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 5000}`);
+app.listen(ENV.PORT, () => {
+  console.log(`Server is running on port ${ENV.PORT}`);
   mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(ENV.MONGO_URI)
     .then(() => {
       console.log("Connected to MongoDB");
     })
