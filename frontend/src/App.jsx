@@ -5,7 +5,7 @@ function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("/api/messages/send")
+    fetch("http://localhost:5000/api/auth/login")
       .then((res) => res.text())
       .then((data) => {
         setMessage(data);
