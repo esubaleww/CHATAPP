@@ -40,7 +40,16 @@ export const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params;
 
     const senderId = req.user._id;
-
+    if (!text && !image) {
+      return res
+        .status(400)
+        .json({ error: "Message text or image is required!" });
+    }
+    if (receiverId === senderId.toString()) {
+      return res
+        .status(400)
+        .json({ error: "You cannot send a message to yourself!" });
+    }
     let imageUrl;
     if (image) {
       const uploadResponse = await cloudinary.uploader.upload(image);
