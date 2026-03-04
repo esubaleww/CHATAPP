@@ -1,17 +1,22 @@
 import epxress from "express";
-
+import {
+  getAllContacts,
+  getChatPartners,
+  getMessagesByUserId,
+  sendMessage,
+} from "../controllers/messageController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { arcjetMiddleware } from "../middleware/arcjetMiddleware.js";
+//arcjetMiddleware,
 const router = epxress.Router();
+router.use(authMiddleware);
 
-router.get("/", (req, res) => {
-  res.send("Hello Guys");
-});
+router.get("/contacts", getAllContacts);
 
-router.get("/send", (req, res) => {
-  res.send("Now You Can Chat");
-});
+router.get("/chats", getChatPartners);
 
-router.post("/send", (req, res) => {
-  res.send("Message Sent");
-});
+router.get("/:id", getMessagesByUserId);
+
+router.post("/send/:id", sendMessage);
 
 export default router;
