@@ -109,6 +109,25 @@ export default function SignUpPage() {
                 </div>
               </div>
             </div>
+            <div className="hidden md:w-1/2 p-6 md:flex items-center justify-center md:border-r bg-linear-to-bl from-slate-800/20 to-transparent">
+              <div>
+                <img
+                  src="/signup.png"
+                  alt="people using mobile devices chatting"
+                  className="w-full h-auto object-contain"
+                />
+                <div className="text-center mt-6">
+                  <h3 className="text-xl font-medium text-cyan-400">
+                    Start Your Journey Today
+                  </h3>
+                  <div className=" mt-4 flex justify-center gap-4">
+                    <span className="auth-badge">Free </span>
+                    <span className="auth-badge">Easy</span>
+                    <span className="auth-badge">Private</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </BorderAnimatedContainer>
       </div>
