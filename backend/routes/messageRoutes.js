@@ -7,9 +7,10 @@ import {
 } from "../controllers/messageController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { arcjetMiddleware } from "../middleware/arcjetMiddleware.js";
-//arcjetMiddleware,
+
 const router = epxress.Router();
-router.use(authMiddleware);
+
+router.use(arcjetMiddleware, authMiddleware);
 
 router.get("/contacts", getAllContacts);
 
