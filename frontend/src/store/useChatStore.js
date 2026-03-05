@@ -10,7 +10,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUserLoading: false,
   isMessagesLoading: false,
-  isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === "true",
+  isSoundEnabled: localStorage.getItem("isSoundEnabled") === "true",
 
   toggleSound: () => {
     localStorage.setItem("isSoundEnabled", !get().isSoundEnabled);
@@ -22,7 +22,7 @@ export const useChatStore = create((set, get) => ({
   getAllContacts: async () => {
     set({ isUserLoading: true });
     try {
-      const res = await axiosInstance.get("/contacts");
+      const res = await axiosInstance.get("/messages/contacts");
       set({ allContacts: res.data });
     } catch (error) {
       toast.error("Failed to load contacts. Please try again.");
@@ -34,7 +34,7 @@ export const useChatStore = create((set, get) => ({
   getMyChatPartners: async () => {
     set({ isUserLoading: true });
     try {
-      const res = await axiosInstance.get("/chats");
+      const res = await axiosInstance.get("/messages/chats");
       set({ chats: res.data });
     } catch (error) {
       toast.error("Failed to load chats. Please try again.");
