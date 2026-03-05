@@ -10,8 +10,10 @@ import { arcjetMiddleware } from "../middleware/arcjetMiddleware.js";
 
 const router = express.Router();
 
-//router.use(arcjetMiddleware);
-
+router.use(arcjetMiddleware);
+router.get("/check", authMiddleware, (req, res) => {
+  res.status(200).json(req.user);
+});
 router.post("/login", login);
 
 router.post("/register", register);
