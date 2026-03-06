@@ -10,17 +10,17 @@ export default function ChatWindow() {
   const {
     selectedUser,
     getMessagesByUserId,
-    isMessageLoading,
+    isMessagesLoading,
     messages,
-    subscibeToMessages,
-    unsubscibeToMessages,
+    subscribeToMessages,
+    unsubscribeToMessages,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
-    subscibeToMessages();
-    return () => unsubscibeToMessages();
+    subscribeToMessages();
+    return () => unsubscribeToMessages();
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ChatWindow() {
     <>
       <ChatHeader />
       <div className="flex-1 px-6 overflow-y-auto py-8">
-        {messages.length > 0 && !isMessageLoading ? (
+        {messages.length > 0 && !isMessagesLoading ? (
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
@@ -62,7 +62,7 @@ export default function ChatWindow() {
             ))}
             <div ref={messageEndRef} />
           </div>
-        ) : isMessageLoading ? (
+        ) : isMessagesLoading ? (
           <MessagesLoadingSkeleton />
         ) : (
           <NoChatHistoryPlaceholder name={selectedUser.fullname} />
