@@ -3,7 +3,7 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
 const BASE_URL = "/";
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: true,
   isSigningUp: false,
@@ -97,7 +97,10 @@ export const useAuthStore = create((set) => ({
     });
   },
 
-  disconnectSocket: async () => {
-    if (get().socket?.connected) get().socket.disconnect();
+  disconnectSocket: () => {
+    if (get().socket?.connected) {
+      get().socket.disconnect();
+    }
+    set({ socket: null, onlineUsers: [] });
   },
 }));

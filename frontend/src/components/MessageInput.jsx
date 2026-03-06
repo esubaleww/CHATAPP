@@ -13,20 +13,21 @@ function MessageInput() {
 
   const { sendMessage, isSoundEnabled } = useChatStore();
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
     if (isSoundEnabled) playRandomKeyStrokeSound();
 
-    sendMessage({
-      text: text.trim(),
-      image: imagePreview,
-    });
-    setText("");
-    setImagePreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    const messageData = { text: text.trim(), image: imagePreview };
+    try {
+      await sendMessage(messageData);
+      setText("");
+      setImagePreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+    }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;

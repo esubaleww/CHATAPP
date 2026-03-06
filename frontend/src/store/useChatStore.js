@@ -59,6 +59,10 @@ export const useChatStore = create((set, get) => ({
   sendMessage: async (messageData) => {
     const { selectedUser } = get();
     const { authUser } = useAuthStore.getState();
+    if (!selectedUser || !authUser) {
+      toast.error("Unable to send message. Please try again.");
+      return;
+    }
     const tempId = `temp-${Date.now()}`;
 
     const optimisticMessage = {
@@ -76,15 +80,12 @@ export const useChatStore = create((set, get) => ({
 
     try {
       const res = await axiosInstance.post(
-        `messages/send/${selectedUser._id}`,
+        `/messages/send/${selectedUser._id}`,
         messageData,
       );
-
       // replace the optimistic message with the server response
       const current = get().messages;
-      const updated = current.map((m) =>
-        m._id === tempId ? res.data : m,
-      );
+      const updated = current.map((m) => (m._id === tempId ? res.data : m));
       set({ messages: updated });
     } catch (error) {
       // remove the optimistic message on failure

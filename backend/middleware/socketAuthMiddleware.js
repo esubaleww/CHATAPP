@@ -7,9 +7,9 @@ export const socketAuthMiddleware = async (socket, next) => {
     const token = socket.handshake.headers.cookie
       ?.split("; ")
       .find((row) => row.startsWith("jwt="))
-      ?.split("=")[1];
+      ?.substring("jwt=".length);
     if (!token) {
-      console.log("Socket connection regected: No token provided");
+      console.log("Socket connection rejected: No token provided");
       return next(new Error("Unauthorized - No token provided"));
     }
     const decoded = jwt.verify(token, ENV.JWT_SECRET);
