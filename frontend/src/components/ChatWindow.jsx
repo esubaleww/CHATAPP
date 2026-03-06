@@ -7,12 +7,20 @@ import MessageInput from "./MessageInput";
 import { useEffect, useRef } from "react";
 
 export default function ChatWindow() {
-  const { selectedUser, getMessagesByUserId, isMessageLoading, messages } =
-    useChatStore();
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    isMessagesLoading,
+    messages,
+    subscribeToMessages,
+    unsubscribeToMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
+    subscribeToMessages();
+    return () => unsubscribeToMessages();
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {
@@ -25,7 +33,7 @@ export default function ChatWindow() {
     <>
       <ChatHeader />
       <div className="flex-1 px-6 overflow-y-auto py-8">
-        {messages.length > 0 && !isMessageLoading ? (
+        {messages.length > 0 && !isMessagesLoading ? (
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((msg) => (
               <div
@@ -54,7 +62,7 @@ export default function ChatWindow() {
             ))}
             <div ref={messageEndRef} />
           </div>
-        ) : isMessageLoading ? (
+        ) : isMessagesLoading ? (
           <MessagesLoadingSkeleton />
         ) : (
           <NoChatHistoryPlaceholder name={selectedUser.fullname} />

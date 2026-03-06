@@ -75,7 +75,6 @@ export const useChatStore = create((set, get) => ({
       isOptimistic: true,
     };
 
-    // add optimistic message using fresh state
     set((prev) => ({ messages: [...prev.messages, optimisticMessage] }));
 
     try {
@@ -83,16 +82,41 @@ export const useChatStore = create((set, get) => ({
         `/messages/send/${selectedUser._id}`,
         messageData,
       );
-      // replace the optimistic message with the server response
+
       const current = get().messages;
       const updated = current.map((m) => (m._id === tempId ? res.data : m));
       set({ messages: updated });
     } catch (error) {
-      // remove the optimistic message on failure
       const current = get().messages;
       const filtered = current.filter((m) => m._id !== tempId);
       set({ messages: filtered });
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
+  },
+
+  subscribeToMessages: async () => {
+    const { selectedUser, isSoundEnabled } = get();
+
+    const socket = useAuthStore.getState().socket;
+    if (!selectedUser || !socket) return;
+    socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser =
+        newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+      const currentMessages = get().messages;
+      set({ messages: [...currentMessages, newMessage] });
+      if (isSoundEnabled) {
+        const notificationSound = new Audio("/sounds/notification.mp3");
+        notificationSound.currentTime = 0;
+        notificationSound
+          .play()
+          .catch((e) => console.log("Audio play failed", e));
+      }
+    });
+  },
+  unsubscribeToMessages: async () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("newMessage");
   },
 }));

@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import { io } from "socket.io-client";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
-const BASE_URL = "/";
+const BASE_URL = "https://chatapp-yg2h.onrender.com" || "/";
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: true,
