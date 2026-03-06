@@ -7,12 +7,20 @@ import MessageInput from "./MessageInput";
 import { useEffect, useRef } from "react";
 
 export default function ChatWindow() {
-  const { selectedUser, getMessagesByUserId, isMessageLoading, messages } =
-    useChatStore();
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    isMessageLoading,
+    messages,
+    subscibeToMessages,
+    unsubscibeToMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   useEffect(() => {
     getMessagesByUserId(selectedUser._id);
+    subscibeToMessages();
+    return () => unsubscibeToMessages();
   }, [selectedUser, getMessagesByUserId]);
 
   useEffect(() => {

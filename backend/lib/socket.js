@@ -14,6 +14,10 @@ const io = new Server(server, {
   },
 });
 
+export function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
+}
+
 io.use(socketAuthMiddleware);
 
 const userSocketMap = {};
