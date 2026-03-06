@@ -7,15 +7,14 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { ENV } from "./lib/env.js";
-
-const app = express();
+import { app, server } from "./lib/socket.js";
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ENV.CLIENT_URL,
     credentials: true,
   }),
 );
@@ -27,7 +26,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(ENV.PORT, () => {
+server.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);
   mongoose.connect(ENV.MONGO_URI);
 });
