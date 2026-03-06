@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import useKeyboardSound from "../hooks/useKeyBoaredSound";
+import useKeyboardSound from "../hooks/useKeyBoardSound";
 import { useChatStore } from "../store/useChatStore";
 import toast from "react-hot-toast";
 import { ImageIcon, SendIcon, XIcon } from "lucide-react";
@@ -23,17 +23,18 @@ function MessageInput() {
       image: imagePreview,
     });
     setText("");
-    setImagePreview("");
+    setImagePreview(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
     }
-
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);

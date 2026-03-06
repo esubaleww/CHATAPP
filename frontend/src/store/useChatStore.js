@@ -57,29 +57,40 @@ export const useChatStore = create((set, get) => ({
   },
 
   sendMessage: async (messageData) => {
+    const { selectedUser } = get();
+    const { authUser } = useAuthStore.getState();
+    const tempId = `temp-${Date.now()}`;
+
+    const optimisticMessage = {
+      _id: tempId,
+      senderId: authUser._id,
+      receiverId: selectedUser._id,
+      text: messageData.text,
+      image: messageData.image,
+      createdAt: new Date().toISOString(),
+      isOptimistic: true,
+    };
+
+    // add optimistic message using fresh state
+    set((prev) => ({ messages: [...prev.messages, optimisticMessage] }));
+
     try {
-      const { selectedUser, messages } = get();
-      const { authUser } = useAuthStore.getState();
-      const tempId = `temp-${Date.now()}`;
-
-      const optimisticMessage = {
-        _id: tempId,
-        senderId: authUser._id,
-        receiverId: selectedUser._id,
-        text: messageData.text,
-        image: messageData.image,
-        createdAt: new Date().toISOString(),
-        isOptimistic: true,
-      };
-      set({ messages: [...messages, optimisticMessage] });
-
       const res = await axiosInstance.post(
         `messages/send/${selectedUser._id}`,
         messageData,
       );
-      set({ messages: messages.concat(res.data) });
+
+      // replace the optimistic message with the server response
+      const current = get().messages;
+      const updated = current.map((m) =>
+        m._id === tempId ? res.data : m,
+      );
+      set({ messages: updated });
     } catch (error) {
-      set({ messages: messages }); //removing the opt msg
+      // remove the optimistic message on failure
+      const current = get().messages;
+      const filtered = current.filter((m) => m._id !== tempId);
+      set({ messages: filtered });
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
   },
