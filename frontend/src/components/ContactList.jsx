@@ -27,7 +27,6 @@ export default function ContactList() {
             <div
               className={`avatar ${onlineUsers?.includes(contact._id) ? "avatar-online" : "avatar-offline"}`}
             >
-              {" "}
               <div className="size-12 rounded-full">
                 <img
                   src={contact.profilePic || "/avatar.png"}
