@@ -114,7 +114,7 @@ export const useChatStore = create((set, get) => ({
       }
     });
   },
-  unsubscribeToMessages: async () => {
+  unsubscribeToMessages: () => {
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off("newMessage");

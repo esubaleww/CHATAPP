@@ -61,7 +61,7 @@ export default function ProfileHeader() {
             <h3 className="text-slate-200 font-medium text-base max-w-45 truncate">
               {authUser?.fullname}
             </h3>
-            <p className="text-slate-400 text-xs">online</p>
+            <p className="text-cyan-400 text-xs">online</p>
           </div>
         </div>
         <div className="flex gap-4 items-center">

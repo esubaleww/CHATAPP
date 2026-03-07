@@ -16,7 +16,7 @@ export default function ChatHeader() {
   }, [selectedUser]);
   return (
     <div className="flex justify-between items-center bg-slate-800/50 border-b border-slate-700/50 max-h-21 px-6 flex-1">
-      <div className="flex items-center space-3">
+      <div className="flex items-center space-x-3">
         <div
           className={`avatar ${isOnline ? "avatar-online" : "avatar-offline"}`}
         >
@@ -31,7 +31,9 @@ export default function ChatHeader() {
           <h3 className="text-slate-200 font-medium">
             {selectedUser.fullname}
           </h3>
-          <p className="text-slate-400 text-sm">
+          <p
+            className={`${isOnline ? "text-cyan-400" : "text-slate-400"} text-sm`}
+          >
             {isOnline ? "online" : "offline"}
           </p>
         </div>

@@ -13,7 +13,6 @@ function App() {
     checkAuth();
   }, [checkAuth]);
 
-  console.log("Auth User:", authUser);
   if (isCheckingAuth) {
     return <PageLoader />;
   }

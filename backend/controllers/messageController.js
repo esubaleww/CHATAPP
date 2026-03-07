@@ -66,9 +66,15 @@ export const sendMessage = async (req, res) => {
     await newMessage.save();
 
     const receiverSockets = getReceiverSocketId(receiverId);
+    const senderSockets = getReceiverSocketId(senderId.toString());
 
     if (receiverSockets) {
       receiverSockets.forEach((socketId) => {
+        io.to(socketId).emit("newMessage", newMessage);
+      });
+    }
+    if (senderSockets) {
+      senderSockets.forEach((socketId) => {
         io.to(socketId).emit("newMessage", newMessage);
       });
     }
