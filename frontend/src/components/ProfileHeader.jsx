@@ -23,7 +23,6 @@ export default function ProfileHeader() {
       const base64Img = reader.result;
       setSelectedImg(base64Img);
       await updateProfile({ profilePic: base64Img });
-      setSelectedImg(null);
     };
   };
   return (
