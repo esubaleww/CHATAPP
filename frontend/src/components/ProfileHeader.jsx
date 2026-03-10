@@ -23,6 +23,7 @@ export default function ProfileHeader() {
       const base64Img = reader.result;
       setSelectedImg(base64Img);
       await updateProfile({ profilePic: base64Img });
+      setSelectedImg(null);
     };
   };
   return (
@@ -35,7 +36,7 @@ export default function ProfileHeader() {
               onClick={() => fileInputRef.current.click()}
             >
               <img
-                src={selectedImg || authUser?.profilePic || "/avatar.png"}
+                src={selectedImg ?? authUser?.profilePic ?? "/avatar.png"}
                 alt="User image"
                 className="object-cover size-full"
               />

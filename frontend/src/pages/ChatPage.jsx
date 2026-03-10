@@ -119,18 +119,16 @@ export default function ChatPage() {
               </div>
             )}
 
-            {isExpanded && (
-              <>
-                <ProfileHeader />
-                <ActiveTabSwitch />
-                <div
-                  className="flex-1 overflow-y-auto p-4 space-y-2"
-                  onClick={handleChatSelect}
-                >
-                  {activeTab === "chats" ? <ChatList /> : <ContactList />}
-                </div>
-              </>
-            )}
+            <div className={isExpanded ? "block" : "hidden"}>
+              <ProfileHeader />
+              <ActiveTabSwitch />
+              <div
+                className="flex-1 overflow-y-auto p-4 space-y-2"
+                onClick={handleChatSelect}
+              >
+                {activeTab === "chats" ? <ChatList /> : <ContactList />}
+              </div>
+            </div>
 
             {isExpanded && (
               <div
